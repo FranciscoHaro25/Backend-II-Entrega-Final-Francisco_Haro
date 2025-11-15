@@ -1,0 +1,102 @@
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-6">
+    <div class="card shadow-lg">
+      <div class="card-body p-5 text-center">
+        <div class="mb-4">
+          {{#if statusCode}}
+            <i class="fas fa-exclamation-triangle fa-4x text-danger mb-3"></i>
+          {{else}}
+            <i class="fas fa-exclamation-triangle fa-4x text-danger mb-3"></i>
+          {{/if}}
+        </div>
+
+        <h1 class="display-4 text-primary mb-3">
+          {{#if statusCode}}
+            {{statusCode}}
+          {{else}}
+            Error
+          {{/if}}
+        </h1>
+
+        <h2 class="h4 mb-4">
+          {{#if title}}
+            {{title}}
+          {{else}}
+            Ha ocurrido un error
+          {{/if}}
+        </h2>
+
+        <p class="text-muted mb-4">
+          {{#if message}}
+            {{message}}
+          {{else}}
+            Lo sentimos, ha ocurrido un error inesperado. Por favor, intenta
+            nuevamente.
+          {{/if}}
+        </p>
+
+        <div
+          class="d-flex flex-column flex-md-row gap-3 justify-content-center"
+        >
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-home me-2"></i>
+            Ir al Inicio
+          </a>
+
+          {{#if isAuthenticated}}
+            <a href="/products" class="btn btn-outline-primary">
+              <i class="fas fa-box me-2"></i>
+              Ver Productos
+            </a>
+          {{else}}
+            <a href="/login" class="btn btn-outline-primary">
+              <i class="fas fa-sign-in-alt me-2"></i>
+              Iniciar Sesión
+            </a>
+          {{/if}}
+
+          <button onclick="history.back()" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver Atrás
+          </button>
+        </div>
+
+        {{#if statusCode}}
+          <div class="alert alert-info mt-4" role="alert">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Código de Error:</strong>
+            {{statusCode}}
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sugerencias adicionales -->
+<div class="row justify-content-center mt-4">
+  <div class="col-md-8 col-lg-6">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h6 class="card-title">
+          <i class="fas fa-lightbulb me-2"></i>
+          ¿Necesitas ayuda?
+        </h6>
+        <ul class="list-unstyled mb-0 small">
+          <li class="mb-2">
+            <i class="fas fa-check text-success me-2"></i>
+            Verifica que la URL esté escrita correctamente
+          </li>
+          <li class="mb-2">
+            <i class="fas fa-check text-success me-2"></i>
+            Asegúrate de tener los permisos necesarios
+          </li>
+          <li class="mb-0">
+            <i class="fas fa-check text-success me-2"></i>
+            Intenta acceder desde la página principal
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

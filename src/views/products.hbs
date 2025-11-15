@@ -1,0 +1,253 @@
+<div class="row">
+    <div class="col-12">
+        <!-- Mensaje de bienvenida personalizado -->
+        <div class="card mb-4">
+            <div class="card-body bg-primary text-white text-center">
+                <h1 class="card-title">
+                    <i class="fas fa-rocket me-2"></i>
+                    ¡Bienvenido/a, {{user.firstName}} {{user.lastName}}!
+                </h1>
+                <p class="card-text mb-0">
+                    {{#if isAdmin}}
+                        <i class="fas fa-crown me-1"></i>
+                        Acceso de <strong>Administrador</strong> - Tienes permisos completos
+                    {{else}}
+                        <i class="fas fa-user me-1"></i>
+                        Usuario estándar - ¡Explora nuestros productos!
+                    {{/if}}
+                </p>
+                <small class="opacity-75">
+                    <i class="fas fa-envelope me-1"></i>
+                    {{user.email}} | 
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    {{user.age}} años
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Panel de información del usuario -->
+    <div class="col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-light">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-user-circle me-2"></i>
+                    Información Personal
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong><i class="fas fa-signature me-2"></i>Nombre completo:</strong><br>
+                    {{user.firstName}} {{user.lastName}}
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-envelope me-2"></i>Correo:</strong><br>
+                    {{user.email}}
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-birthday-cake me-2"></i>Edad:</strong><br>
+                    {{user.age}} años
+                </div>
+                <div class="mb-3">
+                    <strong><i class="fas fa-shield-alt me-2"></i>Rol:</strong><br>
+                    <span class="badge {{#if isAdmin}}bg-warning text-dark{{else}}bg-info{{/if}}">
+                        {{#if isAdmin}}
+                            <i class="fas fa-crown me-1"></i>Administrador
+                        {{else}}
+                            <i class="fas fa-user me-1"></i>Usuario
+                        {{/if}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Catálogo de productos -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-box me-2"></i>
+                    Catálogo de Productos
+                </h5>
+                {{#if isAdmin}}
+                    <span class="badge bg-warning text-dark">
+                        <i class="fas fa-cog me-1"></i>Panel Admin
+                    </span>
+                {{/if}}
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Producto 1 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-laptop fa-lg"></i>
+                                </div>
+                                <h6 class="card-title">Laptop Pro</h6>
+                                <p class="card-text text-muted small">Laptop de alto rendimiento para desarrolladores</p>
+                                <p class="text-primary fw-bold">$1,299.99</p>
+                                {{#if isAdmin}}
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </button>
+                                {{else}}
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-1"></i>Agregar
+                                    </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 2 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-mobile-alt fa-lg"></i>
+                                </div>
+                                <h6 class="card-title">Smartphone X</h6>
+                                <p class="card-text text-muted small">Teléfono inteligente con cámara avanzada</p>
+                                <p class="text-primary fw-bold">$899.99</p>
+                                {{#if isAdmin}}
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </button>
+                                {{else}}
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-1"></i>Agregar
+                                    </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 3 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-headphones fa-lg"></i>
+                                </div>
+                                <h6 class="card-title">Auriculares Bluetooth</h6>
+                                <p class="card-text text-muted small">Auriculares inalámbricos con cancelación de ruido</p>
+                                <p class="text-primary fw-bold">$199.99</p>
+                                {{#if isAdmin}}
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </button>
+                                {{else}}
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-1"></i>Agregar
+                                    </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 4 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="bg-warning text-dark rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-tablet-alt fa-lg"></i>
+                                </div>
+                                <h6 class="card-title">Tablet Design</h6>
+                                <p class="card-text text-muted small">Tablet para diseño y creatividad</p>
+                                <p class="text-primary fw-bold">$599.99</p>
+                                {{#if isAdmin}}
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </button>
+                                {{else}}
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-1"></i>Agregar
+                                    </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 5 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-gamepad fa-lg"></i>
+                                </div>
+                                <h6 class="card-title">Consola Gaming</h6>
+                                <p class="card-text text-muted small">Consola de videojuegos de última generación</p>
+                                <p class="text-primary fw-bold">$499.99</p>
+                                {{#if isAdmin}}
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </button>
+                                {{else}}
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-1"></i>Agregar
+                                    </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Producto 6 -->
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <div class="bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-camera fa-lg"></i>
+                                </div>
+                                <h6 class="card-title">Cámara Digital</h6>
+                                <p class="card-text text-muted small">Cámara profesional para fotografía</p>
+                                <p class="text-primary fw-bold">$799.99</p>
+                                {{#if isAdmin}}
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit me-1"></i>Editar
+                                    </button>
+                                {{else}}
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-shopping-cart me-1"></i>Agregar
+                                    </button>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{#if isAdmin}}
+                    <div class="alert alert-warning mt-4" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Panel de Administrador:</strong> Como administrador, puedes ver y editar todos los productos del catálogo.
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Información adicional para el usuario -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card bg-light">
+            <div class="card-body text-center">
+                <h6 class="card-title">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Información de la Sesión
+                </h6>
+                <p class="card-text small text-muted mb-0">
+                    Sesión iniciada correctamente. 
+                    {{#if isAdmin}}
+                        Tienes permisos de administrador en el sistema.
+                    {{else}}
+                        Estás navegando como usuario estándar.
+                    {{/if}}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
