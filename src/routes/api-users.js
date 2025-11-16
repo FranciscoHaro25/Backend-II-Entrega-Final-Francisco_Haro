@@ -76,8 +76,8 @@ router.post("/", async (req, res) => {
 
     // Crear usuario
     const newUser = new User({
-      firstName: first_name.trim(),
-      lastName: last_name.trim(),
+      first_name: first_name.trim(),
+      last_name: last_name.trim(),
       email: email.toLowerCase().trim(),
       password: hashedPassword,
       age: req.body.age || 25, // Campo requerido por el schema
@@ -110,8 +110,8 @@ router.put("/:id", async (req, res) => {
     const { first_name, last_name, email, role } = req.body;
 
     const updateData = {};
-    if (first_name) updateData.firstName = first_name.trim();
-    if (last_name) updateData.lastName = last_name.trim();
+    if (first_name) updateData.first_name = first_name.trim();
+    if (last_name) updateData.last_name = last_name.trim();
     if (email) updateData.email = email.toLowerCase().trim();
     if (role) updateData.role = role;
 
@@ -202,8 +202,8 @@ router.post("/login", async (req, res) => {
     const tokenPayload = {
       id: user._id,
       email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      first_name: user.first_name,
+      last_name: user.last_name,
       role: user.role,
     };
 
@@ -228,8 +228,8 @@ router.post("/login", async (req, res) => {
       message: "Login exitoso",
       data: {
         id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        first_name: user.first_name,
+        last_name: user.last_name,
         email: user.email,
         role: user.role,
       },

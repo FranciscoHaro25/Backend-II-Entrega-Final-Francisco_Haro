@@ -1,6 +1,8 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
@@ -81,23 +83,23 @@ passport.use(
         }
 
         // Extraer datos del formulario
-        const { firstName, lastName, age } = req.body;
+        const { first_name, last_name, age } = req.body;
 
         // Validar que todos los campos estén presentes
-        if (!firstName || !lastName || !age) {
+        if (!first_name || !last_name || !age) {
           return done(null, false, {
             message: "Todos los campos son obligatorios",
           });
         }
 
-        // Encriptar contraseña con bcrypt
+        // Encriptar contraseña con bcrypt usando hashSync como especifica la consigna
         const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
+        const hashedPassword = bcrypt.hashSync(password, saltRounds);
 
         // Crear nuevo usuario
         const newUser = new User({
-          firstName: firstName.trim(),
-          lastName: lastName.trim(),
+          first_name: first_name.trim(),
+          last_name: last_name.trim(),
           email: email.toLowerCase().trim(),
           password: hashedPassword,
           age: parseInt(age),
@@ -153,8 +155,8 @@ passport.use(
         // Crear nuevo usuario desde GitHub
         const displayName = profile.displayName || profile.username;
         const nameParts = displayName.split(" ");
-        const firstName = nameParts[0] || profile.username;
-        const lastName = nameParts.slice(1).join(" ") || "GitHub";
+        const first_name = nameParts[0] || profile.username;
+        const last_name = nameParts.slice(1).join(" ") || "GitHub";
 
         // Determinar email
         let email;
@@ -177,8 +179,8 @@ passport.use(
         const newUser = new User({
           githubId: profile.id,
           githubUsername: profile.username,
-          firstName: firstName,
-          lastName: lastName,
+          first_name: first_name,
+          last_name: last_name,
           email: email,
           age: 25, // Edad por defecto
           role: userRole,
@@ -192,6 +194,43 @@ passport.use(
       } catch (error) {
         console.error("Error en autenticación GitHub:", error);
         return done(error, null);
+      }
+    }
+  )
+);
+
+// Estrategia JWT para autenticación basada en tokens
+passport.use(
+  "jwt",
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        // Extraer JWT desde cookies firmadas
+        (req) => {
+          let token = null;
+          if (req && req.signedCookies) {
+            token = req.signedCookies["currentUser"];
+          }
+          return token;
+        },
+        // También desde el header Authorization como fallback
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ]),
+      secretOrKey: process.env.JWT_SECRET,
+    },
+    async (jwtPayload, done) => {
+      try {
+        // Buscar usuario por ID del payload JWT
+        const user = await User.findById(jwtPayload.id).select("-password");
+
+        if (user) {
+          return done(null, user);
+        } else {
+          return done(null, false);
+        }
+      } catch (error) {
+        console.error("Error en estrategia JWT:", error);
+        return done(error, false);
       }
     }
   )

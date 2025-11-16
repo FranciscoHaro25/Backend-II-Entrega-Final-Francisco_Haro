@@ -16,8 +16,8 @@ router.post(
         return res.render("register", {
           title: "Registro",
           error: "Error interno del servidor",
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
           email: req.body.email,
           age: req.body.age,
         });
@@ -27,8 +27,8 @@ router.post(
         return res.render("register", {
           title: "Registro",
           error: info ? info.message : "Error en el registro",
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
           email: req.body.email,
           age: req.body.age,
         });
@@ -145,8 +145,8 @@ if (process.env.NODE_ENV !== "production") {
         stats,
         users: users.map((user) => ({
           id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          first_name: user.first_name,
+          last_name: user.last_name,
           email: user.email,
           age: user.age,
           role: user.role,

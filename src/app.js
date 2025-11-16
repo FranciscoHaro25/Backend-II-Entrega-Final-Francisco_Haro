@@ -102,6 +102,10 @@ app.use((req, res, next) => {
 app.use("/api/users", apiUsersRoutes);
 app.use("/users", usersViewsRoutes);
 
+// Rutas para API de sesiones (Entrega Backend II)
+const apiSessionsRoutes = require("./routes/api-sessions");
+app.use("/api/sessions", apiSessionsRoutes);
+
 // Rutas anteriores (mantener compatibilidad con actividades previas)
 app.use("/", viewRoutes);
 app.use("/auth", authRoutes);
@@ -149,6 +153,14 @@ async function startServer() {
       console.log("   DELETE /api/users/:id - Eliminar usuario");
       console.log("   POST   /api/users/login - Login con JWT");
       console.log("   POST   /api/users/logout - Logout JWT");
+      console.log("   ");
+      console.log("🔐 API Sessions (Entrega Backend II):");
+      console.log("   POST /api/sessions/login - Login con JWT");
+      console.log("   POST /api/sessions/register - Registro con JWT");
+      console.log(
+        "   GET  /api/sessions/current - Validar usuario logueado (JWT)"
+      );
+      console.log("   POST /api/sessions/logout - Logout");
       console.log("   ");
       console.log("🔗 Rutas anteriores (compatibilidad):");
       console.log("   GET  /login - Login Passport");

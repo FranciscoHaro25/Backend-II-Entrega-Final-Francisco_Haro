@@ -7,19 +7,19 @@ const mongoose = require("mongoose");
  */
 const userSchema = new mongoose.Schema(
   {
-    firstName: {
+    first_name: {
       type: String,
       required: [true, "El nombre es obligatorio"],
       trim: true,
       maxlength: [50, "El nombre no puede exceder 50 caracteres"],
       minlength: [2, "El nombre debe tener al menos 2 caracteres"],
     },
-    lastName: {
+    last_name: {
       type: String,
       required: [true, "El apellido es obligatorio"],
       trim: true,
       maxlength: [50, "El apellido no puede exceder 50 caracteres"],
-      minlength: [2, "El apellido debe tener al menos 2 caracteres"],
+      minlength: [2, "El apellido debe tener al menos 2 carteres"],
     },
     email: {
       type: String,
@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema(
       required: [true, "La edad es obligatoria"],
       min: [18, "Debes ser mayor de 18 años"],
       max: [120, "Edad máxima permitida es 120 años"],
+    },
+    cart: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cart",
+      default: null,
     },
     role: {
       type: String,
@@ -102,7 +107,7 @@ userSchema.index({ lastLogin: -1 });
 
 // Virtual para nombre completo
 userSchema.virtual("fullName").get(function () {
-  return `${this.firstName} ${this.lastName}`;
+  return `${this.first_name} ${this.last_name}`;
 });
 
 // Virtual para verificar si la cuenta está bloqueada
@@ -215,8 +220,8 @@ userSchema.statics.createDefaultAdmin = async function () {
       const hashedPassword = await bcrypt.hash("admin123", 10);
 
       const adminUser = new this({
-        firstName: "Admin",
-        lastName: "Coder",
+        first_name: "Admin",
+        last_name: "Coder",
         email: "admincoder@coder.com",
         password: hashedPassword,
         age: 30,

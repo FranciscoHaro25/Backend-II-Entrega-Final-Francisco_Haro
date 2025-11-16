@@ -1,130 +1,252 @@
-# Sistema de Autenticación Completo - CoderHouse Backend II
+# 🚀 Entrega N° 1 - Backend II | Sistema de Autenticación y Autorización
 
-## 📋 Descripción
+## 📋 Descripción General
 
-Sistema completo de autenticación con **múltiples implementaciones**:
+Implementación completa de un **CRUD de usuarios** con **sistema de autenticación y autorización** usando:
 
-- **Actividad 3.4**: Passport.js + GitHub OAuth + bcrypt
-- **🆕 Actividad 4.4**: JWT + API REST + Cookies firmadas
+- **Passport.js** con estrategias Local y GitHub OAuth
+- **JWT (JSON Web Tokens)** para autenticación stateless
+- **bcrypt.hashSync** para encriptación de contraseñas
+- **MongoDB Atlas** como base de datos principal
 
-Ambos sistemas coexisten en la misma aplicación para demostrar diferentes enfoques de autenticación en aplicaciones web modernas.
+## ✅ Aspectos Implementados según Consigna
 
-## 🚀 Características Implementadas
+### � Modelo de Usuario
 
-### 🔐 Sistema JWT (Actividad 4.4) - ACTUAL
+Esquema `User` con **todos los campos requeridos**:
 
-- ✅ **JSON Web Tokens** para autenticación stateless
-- ✅ **API REST completa** en `/api/users` (CRUD)
-- ✅ **Cookies firmadas** para almacenar JWT
-- ✅ **Base de datos:** `integrative_practice`
-- ✅ **Vistas específicas:** `/users/login` y `/users/current`
-- ✅ **Validaciones de acceso** con middleware JWT
+```javascript
+{
+  first_name: String,        // ✅ Nombre del usuario
+  last_name: String,         // ✅ Apellido del usuario
+  email: String,             // ✅ Email único e indexado
+  age: Number,               // ✅ Edad del usuario
+  password: String,          // ✅ Contraseña hasheada con bcrypt
+  cart: ObjectId,            // ✅ Referencia a modelo Cart
+  role: String               // ✅ Rol por defecto: 'user'
+}
+```
 
-### 🎫 Sistema Passport.js (Actividad 3.4) - PREVIO
+### 🔐 Encriptación de Contraseñas
 
-- ✅ **Passport.js** con estrategias local y GitHub OAuth
-- ✅ **Autenticación con GitHub** OAuth 2.0
-- ✅ **Hasheo de Contraseñas** con bcrypt (salt rounds: 10)
-- ✅ **Sesiones** almacenadas en MongoDB Atlas
-- ✅ **Base de datos:** `backendII` (compatible)
+- ✅ Implementado **bcrypt.hashSync** como especifica la consigna
+- ✅ Salt rounds: 10 para seguridad óptima
+- ✅ Validación de contraseñas con bcrypt.compare
 
-### 🌟 Características Comunes
+### 🛡️ Estrategias de Passport
 
-- ✅ **MongoDB Atlas** con múltiples bases de datos
-- ✅ **Roles de Usuario**: admin y user
-- ✅ **Interfaz Responsive** con Bootstrap 5
-- ✅ **Validaciones Robustas** en frontend y backend
-- ✅ **Middleware de Protección** para rutas## 🛠️ Tecnologías Utilizadas
+Configuradas **tres estrategias completas**:
 
-- **Node.js** - Entorno de ejecución
-- **Express.js** - Framework web
-- **Passport.js** - Middleware de autenticación (Local + GitHub)
-- **bcrypt** - Hasheo seguro de contraseñas
+1. **Local-Login**: Autenticación con email/password
+2. **Local-Register**: Registro de nuevos usuarios
+3. **JWT**: Validación de tokens para API REST
+4. **GitHub OAuth**: Autenticación con GitHub (bonus)
+
+### 🔑 Sistema de Login JWT
+
+- ✅ **Login exitoso** genera token JWT válido
+- ✅ **Tokens con expiración** de 24 horas
+- ✅ **Payload completo** con datos del usuario
+- ✅ **Autenticación stateless** para APIs
+
+### 🎯 Ruta de Validación `/current`
+
+**IMPLEMENTACIÓN COMPLETA** de `/api/sessions/current`:
+
+- ✅ **Estrategia JWT** de Passport para validación
+- ✅ **Extracción de token** desde cookies y Authorization header
+- ✅ **Retorna datos completos** del usuario logueado
+- ✅ **Manejo de errores** para tokens inválidos/expirados
+
+## 🔧 Características Técnicas
+
+### 🗃️ Base de Datos
+
+- **MongoDB Atlas**: `integrative_practice`
+- **Modelos**: User, Cart, Product
+- **Índices optimizados** para consultas frecuentes
+- **Validaciones robustas** en el esquema
+
+### 🌐 API REST Completa
+
+**Rutas de Sesiones** (`/api/sessions/`):
+
+- `POST /login` - Login con JWT
+- `POST /register` - Registro con JWT
+- `GET /current` - **Validar usuario logueado** ⭐
+- `POST /logout` - Cerrar sesión
+
+**CRUD de Usuarios** (`/api/users/`):
+
+- `GET /` - Obtener todos los usuarios
+- `POST /` - Crear nuevo usuario
+- `GET /:id` - Obtener usuario por ID
+- `PUT /:id` - Actualizar usuario
+- `DELETE /:id` - Eliminar usuario## 🛠️ Stack Tecnológico
+
+### Backend
+
+- **Node.js** v18+ - Entorno de ejecución
+- **Express.js** - Framework web minimalista
+- **Passport.js** - Autenticación con múltiples estrategias
+- **passport-local** - Estrategia de autenticación local
+- **passport-jwt** - Estrategia JWT para APIs
+- **passport-github2** - OAuth con GitHub
+- **bcrypt** - Encriptación segura de contraseñas
+- **jsonwebtoken** - Generación y validación de JWT
+
+### Base de Datos
+
 - **MongoDB Atlas** - Base de datos en la nube
-- **Mongoose** - ODM para MongoDB
-- **Express Session** - Manejo de sesiones
-- **Connect Mongo** - Almacenamiento de sesiones
-- **Express Handlebars** - Motor de plantillas
+- **Mongoose** - ODM para modelado elegante de MongoDB
+
+### Sesiones & Middleware
+
+- **express-session** - Manejo de sesiones HTTP
+- **connect-mongo** - Almacenamiento de sesiones en MongoDB
+- **cookie-parser** - Parser de cookies firmadas
+
+### Frontend
+
+- **Handlebars.js** - Motor de plantillas lógico
 - **Bootstrap 5** - Framework CSS responsivo
-- **Font Awesome** - Librería de iconos
+- **Font Awesome** - Iconografía moderna
 
 ## 📁 Estructura del Proyecto
 
 ```
 practica-1/
 ├── src/
+│   ├── config/
+│   │   ├── database.js      # Configuración MongoDB Atlas
+│   │   ├── db.js           # Conexión y modelos
+│   │   └── passport.js     # Estrategias de autenticación ⭐
 │   ├── middleware/
-│   │   └── auth.js          # Middlewares de autenticación
+│   │   └── auth.js         # Middlewares de protección
+│   ├── models/
+│   │   ├── User.js         # Modelo Usuario (Consigna) ⭐
+│   │   ├── Cart.js         # Modelo Carrito
+│   │   └── Product.js      # Modelo Producto
 │   ├── routes/
-│   │   ├── auth.js          # Rutas de autenticación (/auth)
-│   │   ├── products.js      # Rutas de productos (/products)
-│   │   └── views.js         # Rutas de vistas principales
+│   │   ├── api-sessions.js # API Sessions (/api/sessions) ⭐
+│   │   ├── api-users.js    # CRUD Usuarios (/api/users)
+│   │   ├── auth.js         # Autenticación web (/auth)
+│   │   ├── products.js     # Productos (/products)
+│   │   ├── users-views.js  # Vistas JWT (/users)
+│   │   └── views.js        # Vistas principales (/)
+│   ├── services/
+│   │   └── userService.js  # Lógica de negocio usuarios
 │   ├── utils/
-│   │   └── auth.js          # Utilidades de autenticación
+│   │   └── auth.js         # Utilidades de autenticación
 │   ├── views/
 │   │   ├── layouts/
-│   │   │   └── main.hbs     # Layout principal
-│   │   ├── error.hbs        # Página de errores
-│   │   ├── login.hbs        # Formulario de login
-│   │   ├── products.hbs     # Página de productos
-│   │   └── register.hbs     # Formulario de registro
-│   └── app.js               # Servidor principal
-├── package.json
-└── README.md
+│   │   │   └── main.hbs    # Layout base responsivo
+│   │   ├── current-user.hbs # Usuario actual (JWT)
+│   │   ├── jwt-login.hbs   # Login JWT
+│   │   ├── login.hbs       # Login Passport
+│   │   ├── register.hbs    # Registro de usuario
+│   │   ├── products.hbs    # Catálogo de productos
+│   │   └── error.hbs       # Página de errores
+│   └── app.js              # Servidor principal Express
+├── .env                    # Variables de entorno
+├── package.json           # Dependencias del proyecto
+└── README.md              # Documentación completa
 ```
 
-## 🔧 Instalación y Configuración
+## � Instalación y Ejecución
 
-### Prerrequisitos
+### 📋 Prerrequisitos
 
-- Node.js (v14 o superior)
-- MongoDB (local o MongoDB Atlas)
+- **Node.js v18+**
+- **MongoDB Atlas** (configurado)
+- **Git** para clonar el repositorio
 
-### Pasos de Instalación
+### ⚡ Instalación Rápida
 
-1. **Clonar el repositorio**
+```bash
+# 1. Clonar repositorio
+git clone <url-del-repositorio>
+cd practica-1
 
-   ```bash
-   git clone <tu-repositorio>
-   cd practica-1
-   ```
+# 2. Instalar dependencias
+npm install
 
-2. **Instalar dependencias**
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Editar .env con tus credenciales
 
-   ```bash
-   npm install
-   ```
+# 4. Ejecutar aplicación
+npm start
+```
 
-3. **Configurar MongoDB**
+### 🌐 Acceso
 
-   - Asegúrate de tener MongoDB ejecutándose en `mongodb://localhost:27017`
-   - O modifica la URL de conexión en `src/app.js`
+- **Aplicación Web**: `http://localhost:3000`
+- **API REST**: `http://localhost:3000/api`
+- **Documentación**: Este README
 
-4. **Ejecutar el proyecto**
+### 🔐 Variables de Entorno Requeridas
 
-   ```bash
-   # Modo desarrollo
-   npm run dev
+```env
+# MongoDB Atlas
+MONGODB_URI=mongodb+srv://usuario:password@cluster.mongodb.net/
 
-   # Modo producción
-   npm start
-   ```
+# JWT
+JWT_SECRET=tu_jwt_secret_super_seguro
 
-5. **Acceder a la aplicación**
-   - Abre tu navegador en `http://localhost:8080`
+# GitHub OAuth (opcional)
+GITHUB_CLIENT_ID=tu_github_client_id
+GITHUB_CLIENT_SECRET=tu_github_client_secret
+GITHUB_CALLBACK_URL=http://localhost:3000/auth/github/callback
 
-## 👤 Credenciales de Prueba
+# Express Session
+SESSION_SECRET=tu_session_secret
+```
 
-### Administrador
+## 🧪 Pruebas y Credenciales
 
-- **Email**: `adminCoder@coder.com`
-- **Contraseña**: `admin123`
-- **Rol**: Administrador
+### 👨‍💼 Usuario Administrador (Pre-creado)
 
-### Usuario Normal
+```
+Email: admincoder@coder.com
+Password: admin123
+Role: admin
+```
 
-- **Registro**: Cualquier email válido y contraseña de al menos 6 caracteres
-- **Rol**: Usuario estándar
+### 👤 Crear Usuario Normal
+
+Cualquier email válido + contraseña 6+ caracteres → Role: user
+
+### 🔍 Probar API con curl/Postman
+
+**1. Login y obtener JWT:**
+
+```bash
+curl -X POST http://localhost:3000/api/sessions/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admincoder@coder.com", "password": "admin123"}'
+```
+
+**2. Validar usuario con JWT:**
+
+```bash
+curl -X GET http://localhost:3000/api/sessions/current \
+  -H "Authorization: Bearer <tu-jwt-token>"
+```
+
+**3. Registrar nuevo usuario:**
+
+```bash
+curl -X POST http://localhost:3000/api/sessions/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "Juan",
+    "last_name": "Pérez",
+    "email": "juan@example.com",
+    "password": "juan123",
+    "age": 25
+  }'
+```
 
 ## 🌐 Rutas Disponibles
 
@@ -220,27 +342,59 @@ practica-1/
 - [ ] API REST para gestión de productos
 - [ ] Tests unitarios y de integración
 
-## 📝 Notas para el Profesor
+## ✅ Cumplimiento de Consigna - Entrega N° 1
 
-Este proyecto cumple con todos los requisitos solicitados:
+### 📊 Modelo de Usuario y Encriptación
 
-1. ✅ **Estructura de Login**: Implementadas todas las vistas del hands-on lab
-2. ✅ **Rutas de Router**: Configuradas para registro y login
-3. ✅ **Redirección**: Directa a `/products` en lugar de `/profile`
-4. ✅ **Mensaje de Bienvenida**: Muestra datos del usuario logueado
-5. ✅ **Sistema de Roles**: Admin con `adminCoder@coder.com` y usuarios estándar
-6. ✅ **Manejo de Sesiones**: Configuración completa con express-session
+- ✅ **Modelo User completo** con todos los campos especificados
+- ✅ **Encriptación bcrypt.hashSync** implementada correctamente
+- ✅ **Contraseñas hasheadas** almacenadas de forma segura
+- ✅ **Campo cart** con referencia a modelo Cart
 
-### Credenciales de Prueba Rápida
+### 🛡️ Estrategias de Passport
 
-- **Admin**: `adminCoder@coder.com` / `admin123`
-- **Usuario**: Cualquier email / cualquier contraseña
+- ✅ **Estrategia Local-Login** configurada para autenticación
+- ✅ **Estrategia Local-Register** para registro de usuarios
+- ✅ **Estrategia JWT** implementada para validación de tokens
+- ✅ **Configuración completa** en `src/config/passport.js`
 
-## 🤝 Contribución
+### 🔑 Sistema de Login JWT
 
-Este es un proyecto académico para CoderHouse. Desarrollado siguiendo las mejores prácticas de Node.js y Express.
+- ✅ **Tokens JWT válidos** generados en login exitoso
+- ✅ **Autenticación stateless** funcionando correctamente
+- ✅ **Payload completo** con datos del usuario
+- ✅ **Expiración configurada** (24 horas)
+
+### 🎯 Endpoint /api/sessions/current
+
+- ✅ **Ruta implementada** en `/api/sessions/current`
+- ✅ **Estrategia "current"** (JWT) validando usuarios
+- ✅ **Extracción correcta** de datos del token
+- ✅ **Manejo de errores** para tokens inválidos
+- ✅ **Respuesta completa** con datos del usuario logueado
+
+## 🎓 Notas Académicas
+
+**Entrega Backend II - CoderHouse**  
+**Tema**: CRUD de Usuarios + Autenticación y Autorización  
+**Tecnologías**: Node.js, Express, Passport.js, JWT, MongoDB Atlas, bcrypt
+
+### 🔗 Link del Repositorio
+
+```
+https://github.com/tu-usuario/backend-ii-entrega-1
+```
+
+### 📱 Funcionalidades Extra Implementadas
+
+- GitHub OAuth como método alternativo de autenticación
+- Interfaz web completa con Bootstrap 5
+- Validaciones robustas en frontend y backend
+- Sistema de roles con middleware de autorización
+- API REST completa para gestión de usuarios
 
 ---
 
-**Desarrollado para CoderHouse - Backend II**  
-_Sistema de Login y Autenticación - Práctica 1_
+**Desarrollado por**: [Tu Nombre]  
+**Curso**: Backend II - CoderHouse  
+**Entrega**: N° 1 - Sistema de Autenticación y Autorización
