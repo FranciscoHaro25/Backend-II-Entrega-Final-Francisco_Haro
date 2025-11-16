@@ -18,11 +18,10 @@ class DatabaseConnection {
         maxPoolSize: 10, // Mantener hasta 10 conexiones de socket
         minPoolSize: 5, // Mantener al menos 5 conexiones de socket
         maxIdleTimeMS: 30000, // Cerrar conexiones después de 30 segundos de inactividad
-      }; // Conectar a MongoDB Atlas
-      this.connection = await mongoose.connect(
-        process.env.MONGODB_URI,
-        options
-      );
+      };
+
+      // Conectar a MongoDB Atlas
+      this.connection = await mongoose.connect(process.env.MONGO_URL, options);
       this.isConnected = true;
 
       console.log("🍃 Conectado exitosamente a MongoDB Atlas");

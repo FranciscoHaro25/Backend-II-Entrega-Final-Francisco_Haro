@@ -127,14 +127,12 @@ userSchema.methods.updateLastLogin = async function () {
   return await this.save();
 };
 
-// Middleware pre-save para manejar roles especiales
-userSchema.pre("save", function (next) {
-  // Si el email es adminCoder@coder.com, asignar rol admin automáticamente
-  if (this.email === "admincoder@coder.com") {
-    this.role = "admin";
-  }
-  next();
-});
+// COMENTADO: No asignar roles automáticamente por email hardcodeado
+// Los roles deben persistir desde la base de datos únicamente
+// userSchema.pre("save", function (next) {
+//   // HARDCODING ELIMINADO: No asignar roles por email específico
+//   next();
+// });
 
 // Middleware pre-save para logs
 userSchema.pre("save", function (next) {
