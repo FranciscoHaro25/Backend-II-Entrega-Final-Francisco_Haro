@@ -4,35 +4,25 @@ const GitHubStrategy = require("passport-github2").Strategy;
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 
-/**
- * Configuración de Passport.js con estrategias Local y GitHub
- * Reemplaza la lógica manual de autenticación por un sistema profesional
- */
+// Configuración de Passport.js
+// Implementamos estrategias Local y GitHub para manejar la autenticación
 
-// Serialización de usuario para sesiones
+// Manejo de sesiones con Passport
 passport.serializeUser((user, done) => {
-  console.log("🔐 Serializando usuario:", user._id);
   done(null, user._id);
 });
 
-// Deserialización de usuario desde sesiones
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
-    console.log(
-      "🔓 Deserializando usuario:",
-      user ? user.email : "No encontrado"
-    );
     done(null, user);
   } catch (error) {
-    console.error("❌ Error deserializando usuario:", error);
+    console.error("Error al obtener usuario de sesión:", error);
     done(error, null);
   }
 });
 
-/**
- * ESTRATEGIA LOCAL - Para login/registro con email y password
- */
+// Estrategia local para login
 passport.use(
   "local-login",
   new LocalStrategy(
@@ -43,41 +33,34 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        console.log("🔍 Intentando login local para:", email);
-
         // Buscar usuario por email
         const user = await User.findOne({ email: email.toLowerCase() });
 
         if (!user) {
-          console.log("❌ Usuario no encontrado:", email);
           return done(null, false, {
             message: "Email o contraseña incorrectos",
           });
         }
 
-        // Verificar contraseña con bcrypt
+        // Verificar contraseña usando bcrypt
         const isValidPassword = await bcrypt.compare(password, user.password);
 
         if (!isValidPassword) {
-          console.log("❌ Contraseña incorrecta para:", email);
           return done(null, false, {
             message: "Email o contraseña incorrectos",
           });
         }
 
-        console.log("✅ Login exitoso para:", user.email, `(${user.role})`);
         return done(null, user);
       } catch (error) {
-        console.error("❌ Error en estrategia local login:", error);
+        console.error("Error en login:", error);
         return done(error);
       }
     }
   )
 );
 
-/**
- * ESTRATEGIA LOCAL PARA REGISTRO
- */
+// Estrategia local para registro
 passport.use(
   "local-register",
   new LocalStrategy(
@@ -88,13 +71,10 @@ passport.use(
     },
     async (req, email, password, done) => {
       try {
-        console.log("📝 Intentando registro local para:", email);
-
         // Verificar si el usuario ya existe
         const existingUser = await User.findOne({ email: email.toLowerCase() });
 
         if (existingUser) {
-          console.log("❌ Usuario ya existe:", email);
           return done(null, false, {
             message: "Este email ya está registrado",
           });
@@ -103,14 +83,14 @@ passport.use(
         // Extraer datos del formulario
         const { firstName, lastName, age } = req.body;
 
-        // Validar datos requeridos
+        // Validar que todos los campos estén presentes
         if (!firstName || !lastName || !age) {
           return done(null, false, {
             message: "Todos los campos son obligatorios",
           });
         }
 
-        // Hashear contraseña
+        // Encriptar contraseña con bcrypt
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -121,25 +101,21 @@ passport.use(
           email: email.toLowerCase().trim(),
           password: hashedPassword,
           age: parseInt(age),
-          role: "user", // Por defecto todos son usuarios normales
+          role: "user",
         });
 
-        // Guardar en base de datos
+        // Guardar usuario en la base de datos
         const savedUser = await newUser.save();
-        console.log("✅ Usuario registrado exitosamente:", savedUser.email);
-
         return done(null, savedUser);
       } catch (error) {
-        console.error("❌ Error en estrategia local registro:", error);
+        console.error("Error al registrar usuario:", error);
         return done(error);
       }
     }
   )
 );
 
-/**
- * ESTRATEGIA GITHUB OAUTH
- */
+// Estrategia de autenticación con GitHub
 passport.use(
   new GitHubStrategy(
     {
@@ -149,17 +125,17 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log("🐙 Autenticando con GitHub:", profile.username);
-
-        // Buscar usuario existente por GitHub ID
+        // Buscar si ya existe un usuario con este GitHub ID
         let user = await User.findOne({ githubId: profile.id });
 
         if (user) {
-          console.log("✅ Usuario GitHub existente:", user.email);
+          // Usuario existente, actualizar última conexión
+          user.lastLogin = new Date();
+          await user.save();
           return done(null, user);
         }
 
-        // Buscar por email si existe
+        // Si tiene email, verificar si ya existe una cuenta con ese email
         if (profile.emails && profile.emails.length > 0) {
           const email = profile.emails[0].value;
           user = await User.findOne({ email: email.toLowerCase() });
@@ -168,42 +144,54 @@ passport.use(
             // Vincular cuenta existente con GitHub
             user.githubId = profile.id;
             user.githubUsername = profile.username;
+            user.lastLogin = new Date();
             await user.save();
-            console.log(
-              "🔗 Cuenta existente vinculada con GitHub:",
-              user.email
-            );
             return done(null, user);
           }
         }
 
         // Crear nuevo usuario desde GitHub
+        const displayName = profile.displayName || profile.username;
+        const nameParts = displayName.split(" ");
+        const firstName = nameParts[0] || profile.username;
+        const lastName = nameParts.slice(1).join(" ") || "GitHub";
+
+        // Determinar email
+        let email;
+        if (profile.emails && profile.emails.length > 0) {
+          email = profile.emails[0].value.toLowerCase();
+        } else {
+          email = `${profile.username.toLowerCase()}@github.example.com`;
+        }
+
+        // Determinar rol basado en configuración
+        const adminGithubUsers = process.env.GITHUB_ADMIN_USERS
+          ? process.env.GITHUB_ADMIN_USERS.split(",").map((user) => user.trim())
+          : ["FranciscoHaro25"];
+
+        const userRole = adminGithubUsers.includes(profile.username)
+          ? "admin"
+          : "user";
+
+        // Crear nuevo usuario
         const newUser = new User({
           githubId: profile.id,
           githubUsername: profile.username,
-          firstName: profile.displayName
-            ? profile.displayName.split(" ")[0]
-            : profile.username,
-          lastName: profile.displayName
-            ? profile.displayName.split(" ").slice(1).join(" ")
-            : "",
-          email:
-            profile.emails && profile.emails.length > 0
-              ? profile.emails[0].value.toLowerCase()
-              : `${profile.username}@github.local`,
-          age: 25, // Edad por defecto para usuarios de GitHub
-          role: "user",
-          // No se requiere password para usuarios OAuth
-          password: null,
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          age: 25, // Edad por defecto
+          role: userRole,
+          password: null, // No necesita password para OAuth
+          isActive: true,
+          lastLogin: new Date(),
         });
 
         const savedUser = await newUser.save();
-        console.log("✅ Nuevo usuario creado desde GitHub:", savedUser.email);
-
         return done(null, savedUser);
       } catch (error) {
-        console.error("❌ Error en estrategia GitHub:", error);
-        return done(error);
+        console.error("Error en autenticación GitHub:", error);
+        return done(error, null);
       }
     }
   )

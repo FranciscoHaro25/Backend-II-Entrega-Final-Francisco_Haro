@@ -169,25 +169,61 @@ if (process.env.NODE_ENV !== "production") {
 // ===============================
 
 // GET /auth/github - Iniciar autenticación con GitHub
-router.get(
-  "/github",
-  logActivity("Inicio OAuth GitHub"),
-  passport.authenticate("github", { scope: ["user:email"] })
-);
+router.get("/github", logActivity("Inicio OAuth GitHub"), (req, res, next) => {
+  console.log("🚀 Iniciando autenticación con GitHub...");
+  passport.authenticate("github", {
+    scope: ["user:email"],
+  })(req, res, next);
+});
 
 // GET /auth/github/callback - Callback de GitHub OAuth
 router.get(
   "/github/callback",
   logActivity("Callback OAuth GitHub"),
-  passport.authenticate("github", {
-    failureRedirect: "/login?error=Error en autenticación con GitHub",
-  }),
-  (req, res) => {
-    // Autenticación exitosa
-    console.log(
-      `✅ Login exitoso con GitHub: ${req.user.email} (${req.user.role})`
-    );
-    res.redirect("/products");
+  (req, res, next) => {
+    passport.authenticate(
+      "github",
+      {
+        failureRedirect:
+          "/login?error=Error en autenticación con GitHub. Por favor intenta nuevamente.",
+        failureFlash: false,
+      },
+      (err, user, info) => {
+        if (err) {
+          console.error("❌ Error en callback de GitHub:", err);
+          return res.redirect(
+            "/login?error=Error interno del servidor durante la autenticación con GitHub"
+          );
+        }
+
+        if (!user) {
+          console.log("❌ Autenticación con GitHub fallida:", info);
+          return res.redirect(
+            "/login?error=No se pudo completar la autenticación con GitHub"
+          );
+        }
+
+        // Iniciar sesión manualmente
+        req.logIn(user, (err) => {
+          if (err) {
+            console.error(
+              "❌ Error al crear sesión después de GitHub OAuth:",
+              err
+            );
+            return res.redirect(
+              "/login?error=Error al iniciar sesión después de autenticación con GitHub"
+            );
+          }
+
+          console.log(
+            `✅ Login exitoso con GitHub: ${user.email} (${user.role}) - ID: ${user._id}`
+          );
+          res.redirect(
+            "/products?message=¡Bienvenido! Has iniciado sesión con GitHub exitosamente"
+          );
+        });
+      }
+    )(req, res, next);
   }
 );
 

@@ -72,6 +72,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    githubProfile: {
+      avatar_url: String,
+      html_url: String,
+      name: String,
+    },
     loginAttempts: {
       type: Number,
       default: 0,

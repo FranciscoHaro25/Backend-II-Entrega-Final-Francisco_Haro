@@ -1,30 +1,34 @@
-# Sistema de Login CoderHouse - Práctica Backend II
+# Sistema de Autenticación con Passport.js - CoderHouse Backend II
 
 ## 📋 Descripción
 
-Sistema completo de autenticación y autorización desarrollado con Express.js y Handlebars. Implementa registro de usuarios, login con roles (admin/usuario), manejo de sesiones y redirecciones inteligentes.
+Sistema completo de autenticación refactorizado con Passport.js, bcrypt y autenticación OAuth. Implementa registro seguro, login local y con GitHub, roles de usuario y sesiones persistentes en MongoDB Atlas.
 
-## 🚀 Características Principales
+## 🚀 Características Implementadas
 
-- ✅ **Sistema de Registro y Login** completo
+- ✅ **Hasheo de Contraseñas** con bcrypt (salt rounds: 10)
+- ✅ **Passport.js** para autenticación local y OAuth
+- ✅ **Autenticación con GitHub** OAuth 2.0
+- ✅ **Sistema de Registro y Login** refactorizado
 - ✅ **Roles de Usuario**: Administrador y Usuario estándar
-- ✅ **Manejo de Sesiones** con express-session y MongoDB
-- ✅ **Encriptación de Contraseñas** con bcrypt
-- ✅ **Validaciones de Formularios** del lado del servidor y cliente
-- ✅ **Interfaz Responsiva** con Bootstrap 5
-- ✅ **Middleware de Autenticación** para proteger rutas
-- ✅ **Redirecciones Inteligentes** según estado de autenticación
+- ✅ **Sesiones Seguras** almacenadas en MongoDB Atlas
+- ✅ **Interfaz Responsive** con Bootstrap 5
+- ✅ **Middleware de Protección** para rutas
+- ✅ **Validaciones Robustas** en frontend y backend
 
 ## 🛠️ Tecnologías Utilizadas
 
 - **Node.js** - Entorno de ejecución
 - **Express.js** - Framework web
-- **Express Handlebars** - Motor de plantillas
+- **Passport.js** - Middleware de autenticación (Local + GitHub)
+- **bcrypt** - Hasheo seguro de contraseñas
+- **MongoDB Atlas** - Base de datos en la nube
+- **Mongoose** - ODM para MongoDB
 - **Express Session** - Manejo de sesiones
-- **Connect Mongo** - Almacenamiento de sesiones en MongoDB
-- **Bcrypt** - Encriptación de contraseñas
-- **Bootstrap 5** - Framework CSS
-- **Font Awesome** - Iconos
+- **Connect Mongo** - Almacenamiento de sesiones
+- **Express Handlebars** - Motor de plantillas
+- **Bootstrap 5** - Framework CSS responsivo
+- **Font Awesome** - Librería de iconos
 
 ## 📁 Estructura del Proyecto
 
