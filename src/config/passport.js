@@ -166,14 +166,9 @@ passport.use(
           email = `${profile.username.toLowerCase()}@github.example.com`;
         }
 
-        // Determinar rol basado en configuración
-        const adminGithubUsers = process.env.GITHUB_ADMIN_USERS
-          ? process.env.GITHUB_ADMIN_USERS.split(",").map((user) => user.trim())
-          : ["FranciscoHaro25"];
-
-        const userRole = adminGithubUsers.includes(profile.username)
-          ? "admin"
-          : "user";
+        // Todos los usuarios de GitHub son usuarios normales por defecto
+        // El rol se maneja desde la base de datos, no hardcodeado
+        const userRole = "user";
 
         // Crear nuevo usuario
         const newUser = new User({

@@ -152,37 +152,12 @@ class UserService {
    * Solo se ejecuta si no existe ningún admin y hay variables configuradas
    */
   async createAdminUserFromEnv() {
-    try {
-      const adminExists = await User.findOne({ role: "admin" });
-
-      if (
-        !adminExists &&
-        process.env.ADMIN_EMAIL &&
-        process.env.ADMIN_PASSWORD
-      ) {
-        const adminData = {
-          firstName: process.env.ADMIN_FIRST_NAME || "Admin",
-          lastName: process.env.ADMIN_LAST_NAME || "Coder",
-          email: process.env.ADMIN_EMAIL,
-          password: process.env.ADMIN_PASSWORD,
-          age: parseInt(process.env.ADMIN_AGE) || 30,
-          role: "admin",
-        };
-
-        const newAdmin = await this.createUser(adminData);
-        console.log(
-          "✅ Usuario administrador creado desde variables de entorno:",
-          newAdmin.email
-        );
-        return newAdmin;
-      } else if (adminExists) {
-        console.log("ℹ️ Usuario administrador ya existe");
-      } else {
-        console.log("⚠️ Variables de administrador no configuradas en .env");
-      }
-    } catch (error) {
-      console.error("Error creando usuario administrador:", error);
-    }
+    // COMENTADO: No crear usuarios automáticamente
+    // Todos los usuarios deben venir desde la base de datos
+    console.log(
+      "ℹ️ Creación automática de admin deshabilitada - usar base de datos"
+    );
+    return null;
   }
 
   /**

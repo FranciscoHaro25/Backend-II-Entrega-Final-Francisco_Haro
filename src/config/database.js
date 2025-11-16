@@ -79,33 +79,9 @@ class DatabaseConnection {
   }
 
   async createInitialAdminUser() {
-    try {
-      const User = require("../models/User");
-      const { hashPassword } = require("../utils/auth");
-
-      // Verificar si ya existe el usuario admin
-      const existingAdmin = await User.findByEmail("adminCoder@coder.com");
-
-      if (!existingAdmin) {
-        const hashedPassword = await hashPassword("admin123");
-
-        const adminUser = new User({
-          firstName: "Admin",
-          lastName: "Coder",
-          email: "adminCoder@coder.com",
-          password: hashedPassword,
-          age: 30,
-          role: "admin",
-        });
-
-        await adminUser.save();
-        console.log("👤 Usuario administrador creado exitosamente");
-      } else {
-        console.log("👤 Usuario administrador ya existe");
-      }
-    } catch (error) {
-      console.error("❌ Error al crear usuario administrador:", error);
-    }
+    // COMENTADO: No crear usuarios hardcodeados
+    // Todos los usuarios deben venir desde la base de datos
+    console.log("ℹ️ No se crean usuarios automáticamente - usar base de datos");
   }
 
   async getDBStats() {

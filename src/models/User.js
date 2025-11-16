@@ -210,37 +210,13 @@ userSchema.statics.getStats = async function () {
   }
 };
 
-// Crear usuario admin por defecto
+// COMENTADO: No crear usuarios por defecto hardcodeados
+// Todos los usuarios deben crearse manualmente o desde registro
 userSchema.statics.createDefaultAdmin = async function () {
-  try {
-    const existingAdmin = await this.findByEmail("admincoder@coder.com");
-
-    if (!existingAdmin) {
-      const bcrypt = require("bcrypt");
-      const hashedPassword = await bcrypt.hash("admin123", 10);
-
-      const adminUser = new this({
-        first_name: "Admin",
-        last_name: "Coder",
-        email: "admincoder@coder.com",
-        password: hashedPassword,
-        age: 30,
-        role: "admin",
-      });
-
-      await adminUser.save();
-      console.log(
-        "👤 Usuario administrador creado por defecto en MongoDB Atlas"
-      );
-      return adminUser;
-    } else {
-      console.log("👤 Usuario administrador ya existe en MongoDB Atlas");
-      return existingAdmin;
-    }
-  } catch (error) {
-    console.error("❌ Error al crear usuario admin por defecto:", error);
-    throw error;
-  }
+  console.log(
+    "ℹ️ Creación automática de admin deshabilitada - usar registro manual"
+  );
+  return null;
 };
 
 const User = mongoose.model("User", userSchema);
