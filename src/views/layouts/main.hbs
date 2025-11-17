@@ -25,8 +25,12 @@
       solid #e0e0e0; padding: 12px 15px; transition: all 0.3s ease; }
       .form-control:focus { border-color: #667eea; box-shadow: 0 0 0 0.2rem
       rgba(102,126,234,0.25); } .alert { border: none; border-radius: 10px; }
-      .text-primary { color: #667eea !important; } .footer { margin-top: auto;
-      padding: 20px 0; text-align: center; color: rgba(255,255,255,0.8); }
+      .text-primary { color: #667eea !important; } .btn-outline-danger { border:
+      1px solid #dc3545; color: #dc3545; transition: all 0.3s ease; }
+      .btn-outline-danger:hover { background-color: #dc3545; border-color:
+      #dc3545; color: white; transform: translateY(-1px); box-shadow: 0 2px 8px
+      rgba(220,53,69,0.3); } .footer { margin-top: auto; padding: 20px 0;
+      text-align: center; color: rgba(255,255,255,0.8); }
     </style>
   </head>
   <body class="d-flex flex-column">
@@ -38,18 +42,18 @@
           CoderHouse Sistema
         </a>
 
-        <div class="navbar-nav ms-auto">
+        <div class="navbar-nav ms-auto d-flex align-items-center">
           {{#if isAuthenticated}}
-            <span class="nav-link">
+            <span class="nav-link me-2">
               <i class="fas fa-user-circle me-1"></i>
-              {{user.firstName}}
-              {{user.lastName}}
+              {{user.first_name}}
+              {{user.last_name}}
               {{#if isAdmin}}
                 <span class="badge bg-warning text-dark ms-1">Admin</span>
               {{/if}}
             </span>
             <form action="/auth/logout" method="POST" class="d-inline">
-              <button type="submit" class="btn btn-outline-light btn-sm ms-2">
+              <button type="submit" class="btn btn-outline-danger btn-sm">
                 <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
               </button>
             </form>
