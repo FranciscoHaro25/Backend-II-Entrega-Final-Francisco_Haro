@@ -103,24 +103,3 @@ src/
 └── middleware/
     └── auth.js           # Middleware de autenticación
 ```
-
-## 🔐 Variables de Entorno
-
-```env
-MONGO_URL=mongodb+srv://...
-JWT_SECRET=tu_jwt_secret
-SESSION_SECRET=tu_session_secret
-PORT=3000
-```
-
-## ✅ Cumplimiento de Consigna
-
-| Requisito            | Estado | Implementación                |
-| -------------------- | ------ | ----------------------------- |
-| Modelo User completo | ✅     | `src/models/User.js`          |
-| bcrypt.hashSync      | ✅     | Línea 93 en `api-sessions.js` |
-| Estrategias Passport | ✅     | `src/config/passport.js`      |
-| Sistema JWT          | ✅     | Login genera JWT válido       |
-| Ruta /current        | ✅     | `GET /api/sessions/current`   |
-
----
