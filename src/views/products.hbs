@@ -13,7 +13,7 @@
             <div class="card-body bg-primary text-white text-center">
                 <h1 class="card-title">
                     <i class="fas fa-rocket me-2"></i>
-                    ¡Bienvenido/a, {{user.firstName}} {{user.lastName}}!
+                    ¡Bienvenido/a, {{user.first_name}} {{user.last_name}}!
                 </h1>
                 <p class="card-text mb-0">
                     {{#if isAdmin}}
@@ -48,7 +48,7 @@
             <div class="card-body">
                 <div class="mb-3">
                     <strong><i class="fas fa-signature me-2"></i>Nombre completo:</strong><br>
-                    {{user.firstName}} {{user.lastName}}
+                    {{user.first_name}} {{user.last_name}}
                 </div>
                 <div class="mb-3">
                     <strong><i class="fas fa-envelope me-2"></i>Correo:</strong><br>

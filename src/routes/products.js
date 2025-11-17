@@ -13,14 +13,14 @@ router.use(addUserToViews);
 // GET /products - Página principal de productos (requiere autenticación)
 router.get("/", logActivity("Acceso a productos"), (req, res) => {
   try {
-    // Información adicional del usuario para el contexto (compatible con Passport)
-    const user = req.user;
+    // Convertir usuario a objeto plano para las vistas
+    const user = req.user.toObject ? req.user.toObject() : req.user;
 
     res.render("products", {
       title: "Productos",
       user: user,
       isAdmin: user.role === "admin",
-      welcomeMessage: `¡Bienvenido/a, ${user.firstName}!`,
+      welcomeMessage: `¡Bienvenido/a, ${user.first_name}!`,
     });
   } catch (error) {
     res.status(500).render("error", {
@@ -55,8 +55,8 @@ router.get("/user", (req, res) => {
     message: "Información del usuario autenticado",
     user: {
       id: user._id,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
       age: user.age,
       role: user.role,

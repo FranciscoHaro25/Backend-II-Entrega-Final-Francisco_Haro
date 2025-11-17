@@ -49,9 +49,16 @@ const redirectIfAuthenticated = (req, res, next) => {
  * Permite acceso a datos del usuario en todos los templates (compatible con Passport)
  */
 const addUserToViews = (req, res, next) => {
-  res.locals.user = req.user || null;
-  res.locals.isAuthenticated = !!req.user;
-  res.locals.isAdmin = req.user?.role === "admin";
+  if (req.user) {
+    // Convertir usuario a objeto plano para evitar problemas con Handlebars
+    res.locals.user = req.user.toObject ? req.user.toObject() : req.user;
+    res.locals.isAuthenticated = true;
+    res.locals.isAdmin = req.user.role === "admin";
+  } else {
+    res.locals.user = null;
+    res.locals.isAuthenticated = false;
+    res.locals.isAdmin = false;
+  }
   next();
 };
 
