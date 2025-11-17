@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
-/**
- * Schema de Usuario para MongoDB Atlas
- * Colección: users
- * Base de datos: backendII
- */
+// Schema de Usuario para la base de datos
 const userSchema = new mongoose.Schema(
   {
     first_name: {
@@ -126,13 +122,7 @@ userSchema.methods.updateLastLogin = async function () {
   return await this.save();
 };
 
-// COMENTADO: No asignar roles automáticamente por email hardcodeado
-// Los roles deben persistir desde la base de datos únicamente
-// userSchema.pre("save", function (next) {
-//   // HARDCODING ELIMINADO: No asignar roles por email específico
-//   next();
-// });
-
+// Middleware antes de guardar
 userSchema.pre("save", function (next) {
   next();
 });
