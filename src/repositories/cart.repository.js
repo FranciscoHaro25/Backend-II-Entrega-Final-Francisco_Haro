@@ -37,9 +37,16 @@ class CartRepository {
       throw new Error("Stock insuficiente");
     }
 
-    const existingProductIndex = cart.products.findIndex(
-      (p) => p.product.toString() === productId
-    );
+    // Normalizar productId a string para comparación consistente
+    const productIdStr = productId.toString();
+
+    const existingProductIndex = cart.products.findIndex((p) => {
+      // Manejar tanto productos poblados como no poblados
+      const itemProductId = p.product._id
+        ? p.product._id.toString()
+        : p.product.toString();
+      return itemProductId === productIdStr;
+    });
 
     if (existingProductIndex > -1) {
       cart.products[existingProductIndex].quantity += quantity;
@@ -65,9 +72,15 @@ class CartRepository {
       throw new Error("Carrito no encontrado");
     }
 
-    cart.products = cart.products.filter(
-      (p) => p.product.toString() !== productId
-    );
+    // Normalizar productId a string para comparación consistente
+    const productIdStr = productId.toString();
+
+    cart.products = cart.products.filter((p) => {
+      const itemProductId = p.product._id
+        ? p.product._id.toString()
+        : p.product.toString();
+      return itemProductId !== productIdStr;
+    });
 
     cart.totalAmount = cart.products.reduce(
       (total, item) => total + item.price * item.quantity,
@@ -83,9 +96,15 @@ class CartRepository {
       throw new Error("Carrito no encontrado");
     }
 
-    const productIndex = cart.products.findIndex(
-      (p) => p.product.toString() === productId
-    );
+    // Normalizar productId a string para comparación consistente
+    const productIdStr = productId.toString();
+
+    const productIndex = cart.products.findIndex((p) => {
+      const itemProductId = p.product._id
+        ? p.product._id.toString()
+        : p.product.toString();
+      return itemProductId === productIdStr;
+    });
 
     if (productIndex === -1) {
       throw new Error("Producto no está en el carrito");
