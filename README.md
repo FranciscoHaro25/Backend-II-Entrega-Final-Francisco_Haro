@@ -15,11 +15,18 @@ Configurar el archivo `.env` con las variables necesarias (ver `.env.example`).
 
 - Autenticación con JWT y Passport
 - Sistema de roles (admin, user, premium)
-- CRUD de productos
-- Carrito de compras
+- CRUD de productos (solo admin puede crear, editar y eliminar)
+- Carrito de compras (solo usuarios pueden agregar productos)
 - Generación de tickets de compra
-- Recuperación de contraseña por email
-- Arquitectura por capas (DAO, Repository, Services)
+- Arquitectura por capas (DAO, Repository, Services, DTOs)
+
+### Emails
+
+El sistema envía correos en los siguientes casos:
+
+- **Recuperación de contraseña**: cuando el usuario olvida su contraseña, recibe un mail con un link para restablecerla. El link expira en 1 hora y no permite usar la misma contraseña anterior.
+- **Confirmación de compra**: al finalizar una compra se envía el ticket con el detalle de los productos y el total.
+- **Alerta de stock bajo**: cuando un producto queda con pocas unidades después de una compra, se notifica al administrador.
 
 ## Tecnologías
 
