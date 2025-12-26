@@ -244,13 +244,29 @@ router.post("/forgot-password", async (req, res) => {
 router.post("/reset-password/:token", async (req, res) => {
   try {
     const { token } = req.params;
-    const { password } = req.body;
+    const { password, confirmPassword } = req.body;
 
     if (!password) {
       return res.render("reset-password", {
         title: "Restablecer Contraseña",
         token,
         error: "La nueva contraseña es requerida",
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.render("reset-password", {
+        title: "Restablecer Contraseña",
+        token,
+        error: "Las contraseñas no coinciden",
+      });
+    }
+
+    if (password.length < 6) {
+      return res.render("reset-password", {
+        title: "Restablecer Contraseña",
+        token,
+        error: "La contraseña debe tener al menos 6 caracteres",
       });
     }
 
